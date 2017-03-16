@@ -8,6 +8,7 @@
   "keywords": [],
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.12.0",
     "mocha": "^3.2.0",
     "snyk": "^1.25.2"
   },
@@ -16,7 +17,7 @@
     "prestart": "",
     "start": "node index.js",
     "poststart": "",
-    "snyk" : "snyk test",
+    "snyk": "snyk test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "mocha -t 10000"
