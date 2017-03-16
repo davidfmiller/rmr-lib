@@ -1,0 +1,22 @@
+{
+  "name": "rmr-lib",
+  "version": "0.0.1",
+  "repository": "git@github.com:davidfmiller/rmr-lib.git",
+  "description": "🌏",
+  "license": "MIT",
+  "homepage": "https://github.com/davidfmiller/rmr-lib",
+  "keywords": [],
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {},
+  "scripts": {
+    "prestart": "",
+    "start": "node index.js",
+    "poststart": "",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test": "mocha -t 10000"
+  }
+}
