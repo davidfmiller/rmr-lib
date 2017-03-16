@@ -9,6 +9,14 @@ describe('rmr-lib', function() {
 
   it('mimes', function() {
 
+    expect(RMR.extensionForMime('image/png')).to.equal('png');
+    expect(RMR.extensionForMime('image/tiff')).to.equal('tiff');
+    expect(RMR.extensionForMime('image/jpg')).to.equal('jpg');
+    expect(RMR.extensionForMime('image/jpeg')).to.equal('jpg');
+    expect(RMR.extensionForMime('image/gif')).to.equal('gif');
+    expect(RMR.extensionForMime('image/vnd.microsoft.icon')).to.equal('ico');
+    expect(RMR.extensionForMime('image/x-icon')).to.equal('ico');
+    
     expect(RMR.extensionForMime('text/html')).to.equal('html');
     expect(RMR.extensionForMime('asdfadsf')).to.equal(null);
   
