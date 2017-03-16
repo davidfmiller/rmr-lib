@@ -19,12 +19,15 @@ describe('rmr-lib', function() {
     
     expect(RMR.extensionForMime('text/html')).to.equal('html');
     expect(RMR.extensionForMime('asdfadsf')).to.equal(null);
-  
-//    return meta.retrieve('http://readmeansrun.com', { icons : false }).then(function(data) {
-//      expect(data.favicon).to.equal(undefined);
-//    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
-    
+
+  it('isURL', function() {
+
+    expect(RMR.isURL('http://google.com')).to.equal(true);
+    expect(RMR.isURL('https://google.com')).to.equal(true);
+
+    expect(RMR.isURL('https://google.com')).to.equal(true);
+  });
 
 
 });
