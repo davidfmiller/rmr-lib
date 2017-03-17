@@ -25,7 +25,7 @@ describe('RMR', function() {
 
     expect(RMR.url.isA('http://google.com')).to.equal(true);
     expect(RMR.url.isA('https://google.com')).to.equal(true);
-//    expect(RMR.url.isA('httpinvalid.com')).to.equal(false, 'abc');
+    expect(RMR.url.isA('abc')).to.equal(false);
 
   });
 
