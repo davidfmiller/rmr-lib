@@ -154,21 +154,19 @@ const parseMetadata = function(markup, options) {
  */
 const retrieveMetadata = function(address, options) {
 
-  // TODO http://stackoverflow.com/questions/16687618/how-do-i-get-the-redirected-url-from-the-nodejs-request-module
-
   return new Promise(function(resolve, reject) {
     request.get({
       url : address,
       headers : {
         'User-Agent' : USER_AGENT
-      }
-    }).then(function(markup, response) {
+      },
+      resolveWithFullResponse: true
+    }).then(function(response) {
 
-      console.log(response);
-
-      parseMetadata(markup, options ? options : { baseURL : address, icons : true }).then(function(obj) {
+      parseMetadata(response.body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
         resolve(obj);
       });
+
     }).catch(function(e) {
       reject(e);
     });
@@ -215,7 +213,7 @@ module.exports = {
   }
 };
 
-/*
+
 if (require.main === module) {
  
   if (process.argv.length == 3) {
@@ -228,4 +226,3 @@ if (require.main === module) {
     console.log('🚫  No URL provided');
   }
 }
-*/
