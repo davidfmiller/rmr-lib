@@ -5,21 +5,28 @@
   "description": "🌏",
   "license": "MIT",
   "homepage": "https://github.com/davidfmiller/rmr-lib",
-  "keywords": [],
+  "keywords": [
+    "rmr",
+    "lib"
+  ],
   "devDependencies": {
     "chai": "^3.5.0",
     "coveralls": "^2.12.0",
     "mocha": "^3.2.0",
     "snyk": "^1.25.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "parse5": "^3.0.2",
+    "request-promise-native": "^1.0.3",
+    "xmldom": "^0.1.27",
+    "xmlserializer": "^0.6.0",
+    "xpath": "0.0.24"
+  },
   "scripts": {
-    "prestart": "",
     "start": "node index.js",
-    "poststart": "",
     "snyk": "snyk test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "test": "mocha -t 10000"
+    "test": "mocha"
   }
 }
