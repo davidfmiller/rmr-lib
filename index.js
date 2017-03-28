@@ -177,6 +177,12 @@ const retrieveMetadata = function(address, options) {
 const extensionForMime = function(mime) {
 
   switch (mime) {
+    case 'text/css':
+      return 'css';
+    case 'text/javascript':
+      return 'js';
+    case 'application/json':
+      return 'json';
     case 'text/html':
       return 'html';
     case 'image/png':
@@ -191,6 +197,7 @@ const extensionForMime = function(mime) {
     case 'image/vnd.microsoft.icon':
     case 'image/x-icon':
       return 'ico';
+    case 'application/octet-stream':
     default:
       return null;
   }

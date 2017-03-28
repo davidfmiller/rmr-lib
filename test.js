@@ -48,11 +48,11 @@ describe('RMR.meta', function() {
 
 
   it('apple store', function() {
-    return RMR.meta.retrieve('https://www.apple.com/shop/buy-ipad/ipad-mini-2').then(function(data) {
+    return RMR.meta.retrieve('http://www.apple.com/ipad-pro/').then(function(data) {
 
-      expect(data.title).to.equal('Buy iPad mini 2 - Apple'); 
+      expect(data.title).to.equal('iPad Pro - Apple'); 
       expect(data.favicon.url).to.equal('http://www.apple.com/favicon.ico');
-      expect(data['og:description']).to.equal('iPad mini 2 is available in Silver or Space Gray, a range of storage sizes, and the option to add cellular data capability. View iPad mini 2 and pricing.');
+      expect(data['og:description']).to.equal('iPad Pro delivers epic power, in 12.9-inch and 9.7-inch sizes. Discover the A9X Chip, Advanced Retina display, 12MP iSight camera, and more.');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
@@ -61,7 +61,7 @@ describe('RMR.meta', function() {
     return RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
 
       expect(data.title).to.equal('READMEANSRUN'); 
-      expect(data.favicon.url).to.equal('http://readmeansrun.com/favicon.ico');
+      expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
       expect(data['og:description']).to.equal('READMEANSRUN makes websites and takes pictures');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
