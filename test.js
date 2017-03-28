@@ -7,13 +7,15 @@ const
 describe('RMR.mime', function() {
   this.timeout(10000);
 
-  it('RMR.mime.extensionFor', function() {
+  it('RMR.mime.extensionFor', function extensionFor() {
 
     expect(RMR.mime.extensionFor('image/png')).to.equal('png');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
-    expect(RMR.mime.extensionFor('image/jpg')).to.equal('jpg');
     expect(RMR.mime.extensionFor('image/jpeg')).to.equal('jpg');
     expect(RMR.mime.extensionFor('image/gif')).to.equal('gif');
+
+    expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
+
     expect(RMR.mime.extensionFor('image/vnd.microsoft.icon')).to.equal('ico');
     expect(RMR.mime.extensionFor('image/x-icon')).to.equal('ico');
 
@@ -21,11 +23,23 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
   });
 
-  it('RMR.mime.fromPath', function() {
+  it('RMR.mime.fromPath', function fromPath() {
 
-    expect(RMR.mime.fromPath('file.png')).to.equal('image/png');
+    expect(RMR.mime.fromPath('script.js')).to.equal('text/javascript');
+    expect(RMR.mime.fromPath('script.json')).to.equal('application/json');
+
+    expect(RMR.mime.fromPath('image.jpeg')).to.equal('image/jpeg');
+    expect(RMR.mime.fromPath('image.jpg')).to.equal('image/jpeg');
+    expect(RMR.mime.fromPath('image.gif')).to.equal('image/gif');
+    expect(RMR.mime.fromPath('image.png')).to.equal('image/png');
+    expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
+    expect(RMR.mime.fromPath('page.htm')).to.equal('text/html');
+
+    expect(RMR.mime.fromPath('image.tiff')).to.equal('image/tiff');
+    expect(RMR.mime.fromPath('image.tif')).to.equal('image/tiff');
+
     expect(RMR.mime.fromPath('styles.css')).to.equal('text/css');
-
+    expect(RMR.mime.fromPath('unknown')).to.equal('application/octet-stream');
   });
 
 
@@ -33,7 +47,7 @@ describe('RMR.mime', function() {
 
 describe('RMR.url', function() {
 
-  it('RMR.url', function() {
+  it('RMR.url', function url() {
 
     expect(RMR.url.isA('http://google.com')).to.equal(true);
     expect(RMR.url.isA('https://google.com')).to.equal(true);

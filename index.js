@@ -184,12 +184,26 @@ const mimeForPath = function(arg) {
   const extension = path.extname(arg)
 
   switch (extension) {
+    case '.htm':
     case '.html':
       return 'text/html';
     case '.css':
       return 'text/css';
+    case '.js':
+      return 'text/javascript';
+    case '.json':
+      return 'application/json';
+    case '.jpg':
+    case '.jpeg':
+      return 'image/jpeg';
     case '.png':
       return 'image/png';
+    case '.gif':
+      return 'image/gif';
+
+    case '.tif':
+    case '.tiff':
+      return 'image/tiff';
   }
 
   return 'application/octet-stream';
@@ -198,7 +212,7 @@ const mimeForPath = function(arg) {
 /**
 
  @param mime {String} 
- @return 
+ @return {String} - file extension *without* the leading `.`; `null` if no such file extension is known
  */
 const extensionForMime = function(mime) {
 
@@ -216,7 +230,6 @@ const extensionForMime = function(mime) {
     case 'image/tiff':
       return 'tiff';
     case 'image/jpeg':
-    case 'image/jpg':
       return 'jpg';
     case 'image/gif':
       return 'gif';
