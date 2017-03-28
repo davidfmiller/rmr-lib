@@ -1,7 +1,7 @@
 const
-  assert = require('assert'),
   RMR = require('./index'),
   chai = require('chai'),
+  assert = chai.assert,
   expect = chai.expect;
 
 describe('RMR.mime', function() {
@@ -54,11 +54,25 @@ describe('RMR.url', function() {
     expect(RMR.url.isA('abc')).to.equal(false);
 
   });
+  
+  
 });
 
 
 describe('RMR.meta', function() {
   this.timeout(10000);
+
+  it ('throws', function() {
+  
+    return RMR.meta.retrieve('https://adfadfadfasf.ca').then(function(data) {
+
+      assert.fail();
+
+    }).catch(function(err) {
+      expect(err).to.be.an.instanceof(Error);
+    });
+  });
+
 
   it('google.ca', function() {
     return RMR.meta.retrieve('https://google.ca').then(function(data) {
@@ -67,6 +81,9 @@ describe('RMR.meta', function() {
       expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+
+
+
   });
 
 
