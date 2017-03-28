@@ -7,7 +7,7 @@ const
 describe('RMR.mime', function() {
   this.timeout(10000);
 
-  it('RMR.mime', function() {
+  it('RMR.mime.extensionFor', function() {
 
     expect(RMR.mime.extensionFor('image/png')).to.equal('png');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
@@ -20,6 +20,15 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('text/html')).to.equal('html');
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
   });
+
+  it('RMR.mime.fromPath', function() {
+
+    expect(RMR.mime.fromPath('file.png')).to.equal('image/png');
+    expect(RMR.mime.fromPath('styles.css')).to.equal('text/css');
+
+  });
+
+
 });
 
 describe('RMR.url', function() {

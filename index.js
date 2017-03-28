@@ -9,6 +9,7 @@ const
     process = require('process'),
     DOM = require('xmldom').DOMParser,
     request = require('request-promise-native'),
+    path = require('path'),
 
     USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0 Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0';
 
@@ -173,7 +174,32 @@ const retrieveMetadata = function(address, options) {
   });
 };
 
+/**
 
+ @param path {String}
+ @return 
+ */
+const mimeForPath = function(arg) {
+
+  const extension = path.extname(arg)
+
+  switch (extension) {
+    case '.html':
+      return 'text/html';
+    case '.css':
+      return 'text/css';
+    case '.png':
+      return 'image/png';
+  }
+
+  return 'application/octet-stream';
+};
+
+/**
+
+ @param mime {String} 
+ @return 
+ */
 const extensionForMime = function(mime) {
 
   switch (mime) {
@@ -209,7 +235,8 @@ const isURL = function(str) {
 
 module.exports = {
   mime : {
-    extensionFor : extensionForMime
+    extensionFor : extensionForMime,
+    fromPath : mimeForPath
   },
   url : {
     isA : isURL,
