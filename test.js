@@ -19,6 +19,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('image/vnd.microsoft.icon')).to.equal('ico');
     expect(RMR.mime.extensionFor('image/x-icon')).to.equal('ico');
 
+    expect(RMR.mime.extensionFor('application/pdf')).to.equal('pdf');
     expect(RMR.mime.extensionFor('text/html')).to.equal('html');
     expect(RMR.mime.extensionFor('text/css')).to.equal('css');
     expect(RMR.mime.extensionFor('application/json')).to.equal('json');
@@ -37,6 +38,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('image.png')).to.equal('image/png');
     expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
     expect(RMR.mime.fromPath('page.htm')).to.equal('text/html');
+    expect(RMR.mime.fromPath('document.pdf')).to.equal('application/pdf');
 
     expect(RMR.mime.fromPath('image.tiff')).to.equal('image/tiff');
     expect(RMR.mime.fromPath('image.tif')).to.equal('image/tiff');

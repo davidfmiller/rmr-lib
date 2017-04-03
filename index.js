@@ -189,6 +189,8 @@ const mimeForPath = function(arg) {
       return 'text/html';
     case '.css':
       return 'text/css';
+    case '.pdf':
+      return 'application/pdf';
     case '.js':
       return 'text/javascript';
     case '.json':
@@ -217,6 +219,8 @@ const mimeForPath = function(arg) {
 const extensionForMime = function(mime) {
 
   switch (mime) {
+    case 'application/pdf':
+      return 'pdf';
     case 'text/css':
       return 'css';
     case 'text/javascript':
