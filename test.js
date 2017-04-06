@@ -90,9 +90,17 @@ describe('RMR.meta', function() {
       expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+  });
 
+  it('wired', function() {
+    return RMR.meta.retrieve('https://www.wired.com/2017/04/autodesk-project-discover/').then(function(data) {
 
+      expect(data.title).to.equal('Autodesk\'s Project Discover Creates Floor Plans That Try to Please All Workers | WIRED'); 
+      expect(data['og:title']).to.equal('If an AI Doesn’t Take Your Job, It Will Design Your Office');
+      expect(data['og:image'].url).to.equal('https://www.wired.com/wp-content/uploads/2017/03/AI_office-1200x630-e1491340535830.jpg');
+//      expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
 
+    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
 
 
