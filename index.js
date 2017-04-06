@@ -161,6 +161,7 @@ const retrieveMetadata = function(address, options) {
       headers : {
         'User-Agent' : USER_AGENT
       },
+      gzip: true,
       resolveWithFullResponse: true
     }).then(function(response) {
 
