@@ -22,79 +22,86 @@ const parseMetadata = function(markup, options) {
 
   return new Promise(function(resolve, reject) { 
 
-    const
-      document = parse5.parse(markup),
-      xhtml = xmlser.serializeToString(document),
-      doc = new DOM().parseFromString(xhtml),
-      select = xpath.useNamespaces({'x': 'http://www.w3.org/1999/xhtml'}),
-      metas = select('//x:meta', doc),
-      links = select('//x:link', doc),
-      title = select('//x:title', doc);
-
-    if (! options.baseURL) {
-      options.baseURL = '/';
-    }
-
     var
-      OBJ = {},
-      i = 0,
-      node = null,
-      keyAttribute = null,
-      valueAttribute = null;
+      OBJ = {};
 
-    if (title && title.length) {
-      OBJ.title = title[0].firstChild.nodeValue;
-    }
+    if (markup) {
 
-    for (i in links) {
+      const
+        document = parse5.parse(markup),
+        xhtml = xmlser.serializeToString(document),
+        doc = new DOM().parseFromString(xhtml),
+        select = xpath.useNamespaces({'x': 'http://www.w3.org/1999/xhtml'}),
+        metas = select('//x:meta', doc),
+        links = select('//x:link', doc),
+        title = select('//x:title', doc);
 
-      node = links[i];
-      keyAttribute = xpath.select1('@rel', node);
-      valueAttribute = xpath.select1('@href', node);
-
-      if (! keyAttribute) { continue; }
-
-      if (keyAttribute.value == 'shortcut icon' && valueAttribute) {
-        OBJ.favicon = {
-          mime : null,
-          url : url.resolve(options.baseURL, valueAttribute.value)
-        };
+      if (! options.baseURL) {
+        options.baseURL = '/';
       }
-      else if (keyAttribute.value == 'apple-touch-icon' && valueAttribute) {
-        OBJ['apple-touch-icon'] = {
-          mime : null,
-          url : url.resolve(options.baseURL, valueAttribute.value)
-        };
-      }
-      else if (keyAttribute.value == 'canonical' && valueAttribute) {
-        OBJ.canonical = valueAttribute.value;
-      }
-    }
 
-    for (i in metas) {
-      node = metas[i];
-      keyAttribute = xpath.select1('@property', node);
-      valueAttribute = xpath.select1('@content', node);
+      var
+        OBJ = {},
+        i = 0,
+        node = null,
+        keyAttribute = null,
+        valueAttribute = null;
 
-      if (! keyAttribute) { continue; }
+      if (title && title.length) {
+        OBJ.title = title[0].firstChild.nodeValue;
+      }
 
-      if (keyAttribute.value == 'og:image' && valueAttribute) {
-        OBJ['og:image'] = {
-          mime : null,
-          url : url.resolve(options.baseURL, valueAttribute.value)
-        };
-      }
-      else if (keyAttribute.value == 'og:title' && valueAttribute) {
-        OBJ['og:title'] = valueAttribute.value;
-      }
-      else if (keyAttribute.value == 'og:description' && valueAttribute) {
-        OBJ['og:description'] = valueAttribute.value;
-      }
-    }
+      for (i in links) {
 
-    // if we don't need the icons, resolve
-    if (! options.baseURL || ! options.icons) { 
-      resolve(OBJ);
+        node = links[i];
+        keyAttribute = xpath.select1('@rel', node);
+        valueAttribute = xpath.select1('@href', node);
+
+        if (! keyAttribute) { continue; }
+
+        if (keyAttribute.value == 'shortcut icon' && valueAttribute) {
+          OBJ.favicon = {
+            mime : null,
+            url : url.resolve(options.baseURL, valueAttribute.value)
+          };
+        }
+        else if (keyAttribute.value == 'apple-touch-icon' && valueAttribute) {
+          OBJ['apple-touch-icon'] = {
+            mime : null,
+            url : url.resolve(options.baseURL, valueAttribute.value)
+          };
+        }
+        else if (keyAttribute.value == 'canonical' && valueAttribute) {
+          OBJ.canonical = valueAttribute.value;
+        }
+      }
+
+      for (i in metas) {
+        node = metas[i];
+        keyAttribute = xpath.select1('@property', node);
+        valueAttribute = xpath.select1('@content', node);
+
+        if (! keyAttribute) { continue; }
+
+        if (keyAttribute.value == 'og:image' && valueAttribute) {
+          OBJ['og:image'] = {
+            mime : null,
+            url : url.resolve(options.baseURL, valueAttribute.value)
+          };
+        }
+        else if (keyAttribute.value == 'og:title' && valueAttribute) {
+          OBJ['og:title'] = valueAttribute.value;
+        }
+        else if (keyAttribute.value == 'og:description' && valueAttribute) {
+          OBJ['og:description'] = valueAttribute.value;
+        }
+      }
+
+      // if we don't need the icons, resolve
+      if (! options.baseURL || ! options.icons) { 
+        resolve(OBJ);
+      }
+
     }
 
     var
@@ -121,6 +128,8 @@ const parseMetadata = function(markup, options) {
 
     // if both icons have been retrieved, resolve
     if (Object.keys(addresses).length === 0) { resolve(OBJ); }
+
+
 
     async.map(Object.keys(addresses), function(key, callback) {
       request.head({
@@ -156,22 +165,56 @@ const parseMetadata = function(markup, options) {
 const retrieveMetadata = function(address, options) {
 
   return new Promise(function(resolve, reject) {
-    request.get({
+
+try {
+
+    request.head({
       url : address,
       headers : {
         'User-Agent' : USER_AGENT
-      },
-      gzip: true,
-      resolveWithFullResponse: true
-    }).then(function(response) {
+      }
 
-      parseMetadata(response.body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
-        resolve(obj);
-      });
+    }, function(err, response, body) {
 
-    }).catch(function(e) {
-      reject(e);
+
+      if (err || ! response) {
+        reject(err);
+      } else {
+
+        var type = response.headers['content-type'];
+
+        if (type.substring(0,9) == 'text/html') {
+
+          request.get({
+            url : address,
+            headers : {
+              'User-Agent' : USER_AGENT
+            },
+            gzip: true,
+            resolveWithFullResponse: true
+          }).then(function(response) {
+
+            parseMetadata(response.body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+              resolve(obj);
+            });
+
+          }).catch(function(e) {
+            reject(e);
+          });
+        } else {
+          parseMetadata(null, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+            resolve(obj);
+          });
+
+        }
+      }
     });
+    
+    } catch(e) {
+    
+      reject(e);
+    }
+    
   });
 };
 
@@ -271,7 +314,7 @@ module.exports = {
 };
 
 
-/*
+
 if (require.main === module) {
  
   if (process.argv.length == 3) {
@@ -284,4 +327,3 @@ if (require.main === module) {
     console.log('🚫  No URL provided');
   }
 }
-*/

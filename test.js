@@ -74,13 +74,23 @@ describe('RMR.meta', function() {
   it ('throws', function() {
   
     return RMR.meta.retrieve('https://adfadfadfasf.ca').then(function(data) {
-
       assert.fail();
-
     }).catch(function(err) {
       expect(err).to.be.an.instanceof(Error);
     });
   });
+
+
+  it('RMR', function() {
+    return RMR.meta.retrieve('https://readmeansrun.com/assets/img/og-image.png').then(function(data) {
+
+      expect(data.title).to.equal(undefined); 
+      expect(data['apple-touch-icon'].url).to.equal('https://readmeansrun.com/apple-touch-icon.png');
+      expect(data['favicon'].url).to.equal('https://readmeansrun.com/favicon.ico');
+
+    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+  });
+
 
 
   it('google.ca', function() {
