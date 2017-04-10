@@ -170,10 +170,11 @@ const retrieveMetadata = function(address, options) {
       url : address,
       headers : {
         'User-Agent' : USER_AGENT
-      }
+      },
+      resolveWithFullResponse: true
     }).then(function(response) {
-
-      var type = response['content-type'];
+    
+      var type = response.headers['content-type'];
 
       if (type.substring(0,9) == 'text/html') {
 
@@ -183,7 +184,7 @@ const retrieveMetadata = function(address, options) {
             'User-Agent' : USER_AGENT
           },
           gzip: true,
-//            resolveWithFullResponse: true
+          resolveWithFullResponse: true
         }, function(err, response, body) {
 
           if (err) {
