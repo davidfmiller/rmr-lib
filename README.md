@@ -13,6 +13,8 @@ A well-tested library of code for working with internet metadata:
       RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
         /*{
           "title": "READMEANSRUN",
+          "keywords": "rmr",
+          "description": "READMEANSRUN makes websites and takes pictures",
           "apple-touch-icon": {
             "mime": "image/png",
             "url": "https://readmeansrun.com/apple-touch-icon.png"
