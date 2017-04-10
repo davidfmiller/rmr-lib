@@ -133,6 +133,8 @@ describe('RMR.meta', function() {
       expect(data.title).to.equal('READMEANSRUN'); 
       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
       expect(data['og:description']).to.equal('READMEANSRUN makes websites and takes pictures');
+      expect(data['description']).to.equal('READMEANSRUN makes websites and takes pictures');
+      expect(data['keywords']).to.equal('READMEANSRUN');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });

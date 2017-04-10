@@ -78,10 +78,11 @@ const parseMetadata = function(markup, options) {
 
       for (i in metas) {
         node = metas[i];
-        keyAttribute = xpath.select1('@property', node);
+        keyAttribute = xpath.select1('@property', node) || xpath.select1('@name', node);
         valueAttribute = xpath.select1('@content', node);
 
         if (! keyAttribute) { continue; }
+        if (! valueAttribute) { continue;  }
 
         if (keyAttribute.value == 'og:image' && valueAttribute) {
           OBJ['og:image'] = {
@@ -95,6 +96,13 @@ const parseMetadata = function(markup, options) {
         else if (keyAttribute.value == 'og:description' && valueAttribute) {
           OBJ['og:description'] = valueAttribute.value;
         }
+        else if (keyAttribute.value == 'description' && valueAttribute) {
+          OBJ['description'] = valueAttribute.value;
+        }
+        else if (keyAttribute.value == 'keywords' && valueAttribute) {
+          OBJ['keywords'] = valueAttribute.value;
+        }
+
       }
 
       // if we don't need the icons, resolve
