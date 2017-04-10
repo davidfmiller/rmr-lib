@@ -166,55 +166,50 @@ const retrieveMetadata = function(address, options) {
 
   return new Promise(function(resolve, reject) {
 
-try {
-
     request.head({
       url : address,
       headers : {
         'User-Agent' : USER_AGENT
       }
+    }).then(function(response) {
 
-    }, function(err, response, body) {
+      var type = response['content-type'];
 
+      if (type.substring(0,9) == 'text/html') {
 
-      if (err || ! response) {
-        reject(err);
+        request.get({
+          url : address,
+          headers : {
+            'User-Agent' : USER_AGENT
+          },
+          gzip: true,
+//            resolveWithFullResponse: true
+        }, function(err, response, body) {
+
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          parseMetadata(body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+            resolve(obj);
+          }).catch(function(err) {
+            reject(err);
+          });
+        });
+
       } else {
 
-        var type = response.headers['content-type'];
-
-        if (type.substring(0,9) == 'text/html') {
-
-          request.get({
-            url : address,
-            headers : {
-              'User-Agent' : USER_AGENT
-            },
-            gzip: true,
-            resolveWithFullResponse: true
-          }).then(function(response) {
-
-            parseMetadata(response.body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
-              resolve(obj);
-            });
-
-          }).catch(function(e) {
-            reject(e);
-          });
-        } else {
-          parseMetadata(null, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
-            resolve(obj);
-          });
-
-        }
+        parseMetadata(null, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+          resolve(obj);
+        }).catch(function(e) {
+          reject(e);
+        });
       }
+    }).catch(function(err) { 
+      reject(err);
     });
-    
-    } catch(e) {
-    
-      reject(e);
-    }
-    
+
   });
 };
 
