@@ -25,11 +25,11 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('application/pdf')).to.equal('pdf');
     expect(RMR.mime.extensionFor('text/html')).to.equal('html');
     expect(RMR.mime.extensionFor('text/css')).to.equal('css');
-    
-        expect(RMR.mime.extensionFor('text/javascript')).to.equal('js');
-    
+
+    expect(RMR.mime.extensionFor('text/javascript')).to.equal('js');
+
     expect(RMR.mime.extensionFor('application/json')).to.equal('json');
-    
+
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
   });
 

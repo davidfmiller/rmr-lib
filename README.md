@@ -3,3 +3,31 @@
 
 # rmr-lib
 
+A well-tested library of code for working with internet metadata:
+
+    const
+      RMR = require('rmr-lib'),
+      mime = RMR.mime.fromPath('script.js')), // 'text/javascript'
+      ext = RMR.mime.extensionFor('application/json'), // 'json'
+      isURL = RMR.url.isA('https://google.com'); // true 
+      RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
+        /*{
+          "title": "READMEANSRUN",
+          "apple-touch-icon": {
+            "mime": "image/png",
+            "url": "https://readmeansrun.com/apple-touch-icon.png"
+          },
+          "og:title": "READMEANSRUN",
+          "og:description": "READMEANSRUN makes websites and takes pictures",
+          "og:image": {
+            "mime": "image/png",
+            "url": "https://readmeansrun.com/assets/img/og-image.png"
+          },
+          "favicon": {
+            "mime": "image/x-icon",
+            "url": "https://readmeansrun.com/favicon.ico"
+          }
+        }*/
+      }).catch(function(err)) {
+        console.log('🚫', err);
+      };

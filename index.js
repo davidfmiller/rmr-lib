@@ -16,7 +16,7 @@ const
 /**
 
    @param markup {String} - the contents of the HTML document that will be parsed
-   @param baseURL {String} - (optional) the base URL that should be applied to all relative paths within the document
+   @param options {Object} - `baseURL` (optional) the base URL that should be applied to all relative paths within the document
  */
 const parseMetadata = function(markup, options) {
 
@@ -129,8 +129,6 @@ const parseMetadata = function(markup, options) {
     // if both icons have been retrieved, resolve
     if (Object.keys(addresses).length === 0) { resolve(OBJ); }
 
-
-
     async.map(Object.keys(addresses), function(key, callback) {
       request.head({
         url : addresses[key],
@@ -159,10 +157,31 @@ const parseMetadata = function(markup, options) {
 
 /**
 
-  @param url {String} - 
-  @param options {Object} - 
+  {
+    "title": "READMEANSRUN",
+    "apple-touch-icon": {
+      "mime": "image/png",
+      "url": "https://readmeansrun.com/apple-touch-icon.png"
+    },
+    "og:title": "READMEANSRUN",
+    "og:description": "READMEANSRUN makes websites and takes pictures",
+    "og:image": {
+      "mime": "image/png",
+      "url": "https://readmeansrun.com/assets/img/og-image.png"
+    },
+    "favicon": {
+      "mime": "image/x-icon",
+      "url": "https://readmeansrun.com/favicon.ico"
+    }
+  }
+
+
+  @param address {String} - the URL whose metadata should be retrieved
+  @param options {Object} - `baseURL` 
  */
 const retrieveMetadata = function(address, options) {
+
+  var ARGS = arguments;
 
   return new Promise(function(resolve, reject) {
 
@@ -191,6 +210,12 @@ const retrieveMetadata = function(address, options) {
             reject(err);
             return;
           }
+
+          options = ARGS.length == 2 ? options : {
+            baseURL : response.request.uri.href,
+            icons : true
+          };
+
 
           parseMetadata(body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
             resolve(obj);
@@ -310,7 +335,7 @@ module.exports = {
 };
 
 
-/*
+
 if (require.main === module) {
  
   if (process.argv.length == 3) {
@@ -323,4 +348,3 @@ if (require.main === module) {
     console.log('🚫  No URL provided');
   }
 }
-*/
