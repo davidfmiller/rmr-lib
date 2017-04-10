@@ -310,7 +310,7 @@ module.exports = {
 };
 
 
-
+/*
 if (require.main === module) {
  
   if (process.argv.length == 3) {
@@ -323,3 +323,4 @@ if (require.main === module) {
     console.log('🚫  No URL provided');
   }
 }
+*/
