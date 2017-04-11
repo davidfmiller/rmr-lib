@@ -12,6 +12,7 @@ A well-tested library of code for working with internet metadata:
       isURL = RMR.url.isA('https://google.com'), // true 
       RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
         /*{
+          "mime" : "text/html",
           "title": "READMEANSRUN",
           "keywords": "rmr",
           "description": "READMEANSRUN makes websites and takes pictures",
