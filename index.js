@@ -103,7 +103,7 @@ const parseMetadata = function(markup, options) {
       }
 
       // if we don't need the icons, resolve
-      if (! options.baseURL || ! options.icons) { 
+      if (! options.baseURL || ! options.extended) { 
         resolve(OBJ);
       }
 
@@ -219,7 +219,7 @@ const retrieveMetadata = function(address, options) {
 
           options = ARGS.length == 2 ? options : {
             baseURL : response.request.uri.href,
-            icons : true,
+            extended : true,
             mime : mime
           };
 
@@ -232,7 +232,7 @@ const retrieveMetadata = function(address, options) {
 
       } else {
 
-        parseMetadata(null, options ? options : { mime : mime, baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+        parseMetadata(null, options ? options : { mime : mime, baseURL : response.request.uri.href, extended : true }).then(function(obj) {
           resolve(obj);
         }).catch(function(e) {
           reject(e);
@@ -341,7 +341,7 @@ module.exports = {
 };
 
 
-
+/*
 if (require.main === module) {
  
   if (process.argv.length == 3) {
@@ -354,3 +354,4 @@ if (require.main === module) {
     console.log('🚫  No URL provided');
   }
 }
+*/
