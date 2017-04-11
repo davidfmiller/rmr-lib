@@ -23,11 +23,24 @@ const parseMetadata = function(markup, options) {
   return new Promise(function(resolve, reject) { 
 
     var
-      OBJ = options && options.mime ? { mime : options.mime.split(';')[0] } : {},
+      OBJ = { og : {} },
       i = 0,
       node = null,
       keyAttribute = null,
       valueAttribute = null;
+
+    if (options.mime) {
+      OBJ.mime = options.mime.split(';')[0];
+    }
+
+    if (options.bytes) {
+      OBJ.bytes = options.bytes;
+    }
+
+    if (! options.baseURL) {
+      options.baseURL = '/';
+    }
+    OBJ.url = options.baseURL;
 
     if (markup) {
 
@@ -40,9 +53,7 @@ const parseMetadata = function(markup, options) {
         links = select('//x:link', doc),
         title = select('//x:title', doc);
 
-      if (! options.baseURL) {
-        options.baseURL = '/';
-      }
+//console.log(options);
 
       if (title && title.length) {
         OBJ.title = title[0].firstChild.nodeValue;
@@ -82,31 +93,29 @@ const parseMetadata = function(markup, options) {
         if (! valueAttribute) { continue;  }
 
         if (keyAttribute.value == 'og:image' && valueAttribute) {
-          OBJ['og:image'] = {
+          OBJ.og.image = {
             mime : null,
             url : url.resolve(options.baseURL, valueAttribute.value)
           };
         }
         else if (keyAttribute.value == 'og:title' && valueAttribute) {
-          OBJ['og:title'] = valueAttribute.value;
+          OBJ.og.title = valueAttribute.value;
         }
         else if (keyAttribute.value == 'og:description' && valueAttribute) {
-          OBJ['og:description'] = valueAttribute.value;
+          OBJ.og.description = valueAttribute.value;
         }
         else if (keyAttribute.value == 'description' && valueAttribute) {
-          OBJ['description'] = valueAttribute.value;
+          OBJ.description = valueAttribute.value;
         }
         else if (keyAttribute.value == 'keywords' && valueAttribute) {
-          OBJ['keywords'] = valueAttribute.value;
+          OBJ.keywords = valueAttribute.value;
         }
-
       }
 
       // if we don't need the icons, resolve
       if (! options.baseURL || ! options.extended) { 
         resolve(OBJ);
       }
-
     }
 
     var
@@ -120,8 +129,8 @@ const parseMetadata = function(markup, options) {
       addresses.favicon = url.resolve(parsed.protocol + '//' + parsed.hostname, '/favicon.ico');
     }
 
-    if (OBJ['og:image']) {
-      addresses['og:image'] = OBJ['og:image'].url;
+    if (OBJ.og.image) {
+      addresses['og.image'] = OBJ.og.image.url;
     }
 
     if (OBJ['apple-touch-icon']) {
@@ -142,10 +151,19 @@ const parseMetadata = function(markup, options) {
         }
       }).then(function(response) {
 
-        OBJ[key] = { 
-          mime : response['content-type'],
-          url : addresses[key]
-        };
+        var bits = key.split('.');
+        if (bits.length == 1) {
+          OBJ[key] = { 
+            mime : response['content-type'],
+            url : addresses[key]
+          };
+        } else {
+          OBJ[bits[0]][bits[1]] = { 
+            mime : response['content-type'],
+            url : addresses[key]
+          };
+        }
+
 
         callback();
       }).catch(function(e) { // if icon doesn't exist, move on
@@ -161,18 +179,22 @@ const parseMetadata = function(markup, options) {
 
 
 /**
-
   {
+    "url" : "https://readmeansrun.com/",
+    "mime" : "text/html",
+    "bytes" : 23, // # of bytes
     "title": "READMEANSRUN",
     "apple-touch-icon": {
       "mime": "image/png",
       "url": "https://readmeansrun.com/apple-touch-icon.png"
     },
-    "og:title": "READMEANSRUN",
-    "og:description": "READMEANSRUN makes websites and takes pictures",
-    "og:image": {
-      "mime": "image/png",
-      "url": "https://readmeansrun.com/assets/img/og-image.png"
+    "og" : {
+      title": "READMEANSRUN",
+      "description": "READMEANSRUN makes websites and takes pictures",
+      "image": {
+        "mime": "image/png",
+        "url": "https://readmeansrun.com/assets/img/og-image.png"
+      }
     },
     "favicon": {
       "mime": "image/x-icon",
@@ -180,14 +202,17 @@ const parseMetadata = function(markup, options) {
     }
   }
 
-
   @param address {String} - the URL whose metadata should be retrieved
   @param options {Object} - `baseURL` 
  */
 const retrieveMetadata = function(address, options) {
 
   var ARGS = arguments;
-//  if (arguments.length == 2) { options = {}; }
+  if (! options) {
+    options = {
+      extended : true
+    };
+  }
 
   return new Promise(function(resolve, reject) {
 
@@ -199,7 +224,15 @@ const retrieveMetadata = function(address, options) {
       resolveWithFullResponse: true
     }).then(function(response) {
 
-      var mime = response.headers['content-type'];
+      var
+        mime = response.headers['content-type'],
+        length = response.headers['content-length'];
+
+      options.mime = mime;
+      options.baseURL = response.request.uri.href;
+      if (length) {
+        options.bytes = parseInt(length, 10);
+      }
 
       if (mime.substring(0,9) == 'text/html') {
 
@@ -210,18 +243,12 @@ const retrieveMetadata = function(address, options) {
           },
           gzip: true,
           resolveWithFullResponse: true
-        }, function(err, response, body) {
+        }, function(err, resp, body) {
 
           if (err) {
             reject(err);
             return;
           }
-
-          options = ARGS.length == 2 ? options : {
-            baseURL : response.request.uri.href,
-            extended : true,
-            mime : mime
-          };
 
           parseMetadata(body, options).then(function(obj) {
             resolve(obj);
@@ -232,7 +259,7 @@ const retrieveMetadata = function(address, options) {
 
       } else {
 
-        parseMetadata(null, options ? options : { mime : mime, baseURL : response.request.uri.href, extended : true }).then(function(obj) {
+        parseMetadata(null, options).then(function(obj) {
           resolve(obj);
         }).catch(function(e) {
           reject(e);
@@ -341,7 +368,7 @@ module.exports = {
 };
 
 
-/*
+
 if (require.main === module) {
  
   if (process.argv.length == 3) {
@@ -354,4 +381,3 @@ if (require.main === module) {
     console.log('🚫  No URL provided');
   }
 }
-*/
