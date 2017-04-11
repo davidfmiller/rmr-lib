@@ -302,6 +302,8 @@ const mimeForPath = function(arg) {
       return 'image/gif';
     case '.xml':
       return 'text/xml';
+    case '.svg':
+      return 'image/svg+xml';
 
     case '.tif':
     case '.tiff':
@@ -337,6 +339,8 @@ const extensionForMime = function(mime) {
       return 'jpg';
     case 'image/gif':
       return 'gif';
+    case 'image/svg+xml':
+      return 'svg';
     case 'text/xml':
     case 'application/xml':
       return 'xml';

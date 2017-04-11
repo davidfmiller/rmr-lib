@@ -23,6 +23,9 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('text/xml')).to.equal('xml');
 
     expect(RMR.mime.extensionFor('application/pdf')).to.equal('pdf');
+
+    expect(RMR.mime.extensionFor('image/svg+xml')).to.equal('svg');
+
     expect(RMR.mime.extensionFor('text/html')).to.equal('html');
     expect(RMR.mime.extensionFor('text/css')).to.equal('css');
 
@@ -42,6 +45,9 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('image.jpg')).to.equal('image/jpeg');
     expect(RMR.mime.fromPath('image.gif')).to.equal('image/gif');
     expect(RMR.mime.fromPath('image.png')).to.equal('image/png');
+    
+    expect(RMR.mime.fromPath('image.svg')).to.equal('image/svg+xml');
+    
     expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
     expect(RMR.mime.fromPath('doc.xml')).to.equal('text/xml');
     expect(RMR.mime.fromPath('page.htm')).to.equal('text/html');
