@@ -9,7 +9,7 @@ A well-tested library of code for working with internet metadata:
       RMR = require('rmr-lib'),
       mime = RMR.mime.fromPath('script.js')), // 'text/javascript'
       ext = RMR.mime.extensionFor('application/json'), // 'json'
-      isURL = RMR.url.isA('https://google.com'); // true 
+      isURL = RMR.url.isA('https://google.com'), // true 
       RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
         /*{
           "title": "READMEANSRUN",

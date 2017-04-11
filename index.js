@@ -23,7 +23,11 @@ const parseMetadata = function(markup, options) {
   return new Promise(function(resolve, reject) { 
 
     var
-      OBJ = {};
+      OBJ = options && options.mime ? { mime : options.mime.split(';')[0] } : {},
+      i = 0,
+      node = null,
+      keyAttribute = null,
+      valueAttribute = null;
 
     if (markup) {
 
@@ -39,13 +43,6 @@ const parseMetadata = function(markup, options) {
       if (! options.baseURL) {
         options.baseURL = '/';
       }
-
-      var
-        OBJ = {},
-        i = 0,
-        node = null,
-        keyAttribute = null,
-        valueAttribute = null;
 
       if (title && title.length) {
         OBJ.title = title[0].firstChild.nodeValue;
@@ -190,6 +187,7 @@ const parseMetadata = function(markup, options) {
 const retrieveMetadata = function(address, options) {
 
   var ARGS = arguments;
+//  if (arguments.length == 2) { options = {}; }
 
   return new Promise(function(resolve, reject) {
 
@@ -200,10 +198,10 @@ const retrieveMetadata = function(address, options) {
       },
       resolveWithFullResponse: true
     }).then(function(response) {
-    
-      var type = response.headers['content-type'];
 
-      if (type.substring(0,9) == 'text/html') {
+      var mime = response.headers['content-type'];
+
+      if (mime.substring(0,9) == 'text/html') {
 
         request.get({
           url : address,
@@ -221,11 +219,11 @@ const retrieveMetadata = function(address, options) {
 
           options = ARGS.length == 2 ? options : {
             baseURL : response.request.uri.href,
-            icons : true
+            icons : true,
+            mime : mime
           };
 
-
-          parseMetadata(body, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+          parseMetadata(body, options).then(function(obj) {
             resolve(obj);
           }).catch(function(err) {
             reject(err);
@@ -234,7 +232,7 @@ const retrieveMetadata = function(address, options) {
 
       } else {
 
-        parseMetadata(null, options ? options : { baseURL : response.request.uri.href, icons : true }).then(function(obj) {
+        parseMetadata(null, options ? options : { mime : mime, baseURL : response.request.uri.href, icons : true }).then(function(obj) {
           resolve(obj);
         }).catch(function(e) {
           reject(e);

@@ -84,16 +84,16 @@ describe('RMR.meta', function() {
   });
 
 
-  it('RMR', function() {
+  it('RMR og:image', function() {
     return RMR.meta.retrieve('https://readmeansrun.com/assets/img/og-image.png').then(function(data) {
 
       expect(data.title).to.equal(undefined); 
       expect(data['apple-touch-icon'].url).to.equal('https://readmeansrun.com/apple-touch-icon.png');
       expect(data['favicon'].url).to.equal('https://readmeansrun.com/favicon.ico');
+      expect(data['mime']).to.equal('image/png');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
-
 
 
   it('google.ca', function() {
@@ -101,9 +101,11 @@ describe('RMR.meta', function() {
 
       expect(data.title).to.equal('Google'); 
       expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
+      expect(data['mime']).to.equal('text/html');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
+
 
   it('wired', function() {
     return RMR.meta.retrieve('https://www.wired.com/2017/04/autodesk-project-discover/').then(function(data) {
@@ -123,6 +125,7 @@ describe('RMR.meta', function() {
       expect(data.title).to.equal('iPad Pro - Apple'); 
       expect(data.favicon.url).to.equal('http://www.apple.com/favicon.ico');
       expect(data['og:description']).to.equal('iPad Pro delivers epic power, in 12.9-inch and 9.7-inch sizes. Discover the A9X Chip, Advanced Retina display, 12MP iSight camera, and more.');
+      expect(data['mime']).to.equal('text/html');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
@@ -135,6 +138,7 @@ describe('RMR.meta', function() {
       expect(data['og:description']).to.equal('READMEANSRUN makes websites and takes pictures');
       expect(data['description']).to.equal('READMEANSRUN makes websites and takes pictures');
       expect(data['keywords']).to.equal('READMEANSRUN');
+      expect(data['mime']).to.equal('text/html');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
   });
