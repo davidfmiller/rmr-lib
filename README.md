@@ -3,7 +3,7 @@
 
 # rmr-lib
 
-A well-tested library of code for working with internet metadata:
+A well-tested & well-documented library of code for working with internet metadata:
 
     const
       RMR = require('rmr-lib'),
@@ -38,3 +38,5 @@ A well-tested library of code for working with internet metadata:
       }).catch(function(err)) {
         console.log('🚫', err);
       };
+
+View the inline documentation for more info.

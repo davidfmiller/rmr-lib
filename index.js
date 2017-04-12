@@ -14,9 +14,35 @@ const
     USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0 Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0';
 
 /**
+  Retrieve metadata from a HTML document
 
-   @param markup {String} - the contents of the HTML document that will be parsed
-   @param options {Object} - `baseURL` (optional) the base URL that should be applied to all relative paths within the document
+  @param markup {String} - the contents of the HTML document that will be parsed
+  @param options {Object} - `baseURL` {String} - base URL that will be applied to all relative paths within the document
+                            `extended` {Bool}  - if `true` external resources will be retrieved
+  @return {Object} - ex:
+
+  {
+    "url" : "https://readmeansrun.com/",
+    "mime" : "text/html",
+    "bytes" : 23, // # of bytes
+    "title": "READMEANSRUN",
+    "apple-touch-icon": {
+      "mime": "image/png",
+      "url": "https://readmeansrun.com/apple-touch-icon.png"
+    },
+    "og" : {
+      title": "READMEANSRUN",
+      "description": "READMEANSRUN makes websites and takes pictures",
+      "image": {
+        "mime": "image/png",
+        "url": "https://readmeansrun.com/assets/img/og-image.png"
+      }
+    },
+    "favicon": {
+      "mime": "image/x-icon",
+      "url": "https://readmeansrun.com/favicon.ico"
+    }
+  }
  */
 const parseMetadata = function(markup, options) {
 
@@ -179,31 +205,12 @@ const parseMetadata = function(markup, options) {
 
 
 /**
-  {
-    "url" : "https://readmeansrun.com/",
-    "mime" : "text/html",
-    "bytes" : 23, // # of bytes
-    "title": "READMEANSRUN",
-    "apple-touch-icon": {
-      "mime": "image/png",
-      "url": "https://readmeansrun.com/apple-touch-icon.png"
-    },
-    "og" : {
-      title": "READMEANSRUN",
-      "description": "READMEANSRUN makes websites and takes pictures",
-      "image": {
-        "mime": "image/png",
-        "url": "https://readmeansrun.com/assets/img/og-image.png"
-      }
-    },
-    "favicon": {
-      "mime": "image/x-icon",
-      "url": "https://readmeansrun.com/favicon.ico"
-    }
-  }
+  Retrieve metadata from a URL
 
+  @see parseMetadata
   @param address {String} - the URL whose metadata should be retrieved
-  @param options {Object} - `baseURL` 
+  @param options {Object} - see `options` for parseMetadata 
+  @throws {Error} - if the address can't be retrieved
  */
 const retrieveMetadata = function(address, options) {
 
@@ -273,13 +280,14 @@ const retrieveMetadata = function(address, options) {
 };
 
 /**
+ Determine the mime-type for a given file
 
- @param path {String}
- @return 
+ @param filename {String} - The (complete or partial) file name whose mime-type should be determined
+ @return {String} - Defaults to 'application/octet-stream'
  */
-const mimeForPath = function(arg) {
+const mimeForPath = function(filename) {
 
-  const extension = path.extname(arg)
+  const extension = path.extname(filename);
 
   switch (extension) {
     case '.htm':
@@ -304,7 +312,6 @@ const mimeForPath = function(arg) {
       return 'text/xml';
     case '.svg':
       return 'image/svg+xml';
-
     case '.tif':
     case '.tiff':
       return 'image/tiff';
@@ -314,6 +321,7 @@ const mimeForPath = function(arg) {
 };
 
 /**
+ Retrieve file extension for a given mime-type
 
  @param mime {String} 
  @return {String} - file extension *without* the leading `.`; `null` if no such file extension is known
@@ -353,6 +361,12 @@ const extensionForMime = function(mime) {
   }
 };
 
+/**
+  Determine if a string is a valid internet URL
+
+  @param str {String} - the string to be tested
+  @return {Bool} - `true` of `false`
+ */
 const isURL = function(str) {
   return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(str);
 };
