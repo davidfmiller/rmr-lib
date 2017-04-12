@@ -31,7 +31,8 @@ const
       "url": "https://readmeansrun.com/apple-touch-icon.png"
     },
     "og" : {
-      title": "READMEANSRUN",
+      "email": "davidfmiller@me.com",
+      "title": "READMEANSRUN",
       "description": "READMEANSRUN makes websites and takes pictures",
       "image": {
         "mime": "image/png",
@@ -126,6 +127,9 @@ const parseMetadata = function(markup, options) {
         }
         else if (keyAttribute.value == 'og:title' && valueAttribute) {
           OBJ.og.title = valueAttribute.value;
+        }
+        else if (keyAttribute.value == 'og:email' && valueAttribute) {
+          OBJ.og.email = valueAttribute.value;
         }
         else if (keyAttribute.value == 'og:description' && valueAttribute) {
           OBJ.og.description = valueAttribute.value;

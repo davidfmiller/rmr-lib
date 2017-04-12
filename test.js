@@ -108,6 +108,7 @@ describe('RMR.meta', function() {
       expect(data.title).to.equal('Google'); 
       expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
       expect(data.bytes).to.equal(undefined);
+      expect(data.og.email).to.equal(undefined);
       expect(data.mime).to.equal('text/html');
 
     }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
@@ -130,7 +131,7 @@ describe('RMR.meta', function() {
     return RMR.meta.retrieve('http://www.apple.com/ipad-pro/').then(function(data) {
 
       expect(data.title).to.equal('iPad Pro - Apple'); 
-      expect(data.favicon.url).to.equal('http://www.apple.com/favicon.ico');
+      expect(data.favicon.url).to.equal('https://www.apple.com/favicon.ico');
       expect(data.og.description).to.equal('iPad Pro delivers epic power, in 12.9-inch and 9.7-inch sizes. Discover the A9X Chip, Advanced Retina display, 12MP iSight camera, and more.');
       expect(data.mime).to.equal('text/html');
 
@@ -142,8 +143,9 @@ describe('RMR.meta', function() {
 
       expect(data.title).to.equal('READMEANSRUN'); 
       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
-      expect(data.og.description).to.equal('READMEANSRUN makes websites and takes pictures');
-      expect(data.description).to.equal('READMEANSRUN makes websites and takes pictures');
+      expect(data.og.description).to.equal('READMEANSRUN programs computers and takes pictures');
+      expect(data.og.email).to.equal('davidfmiller@me.com');
+      expect(data.description).to.equal('READMEANSRUN programs computers and takes pictures');
       expect(data.keywords).to.equal('READMEANSRUN');
       expect(data.mime).to.equal('text/html');
       expect(data.url).to.equal('https://readmeansrun.com/');

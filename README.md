@@ -24,6 +24,7 @@ A well-tested & well-documented library of code for working with internet metada
           },
           "og" : {
             "title": "READMEANSRUN",
+            "email": "davidfmiller@me.com",
             "description": "READMEANSRUN makes websites and takes pictures",
             "image": {
               "mime": "image/png",
