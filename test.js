@@ -13,26 +13,17 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
     expect(RMR.mime.extensionFor('image/jpeg')).to.equal('jpg');
     expect(RMR.mime.extensionFor('image/gif')).to.equal('gif');
-
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
-
     expect(RMR.mime.extensionFor('image/vnd.microsoft.icon')).to.equal('ico');
     expect(RMR.mime.extensionFor('image/x-icon')).to.equal('ico');
-
     expect(RMR.mime.extensionFor('application/xml')).to.equal('xml');
     expect(RMR.mime.extensionFor('text/xml')).to.equal('xml');
-
     expect(RMR.mime.extensionFor('application/pdf')).to.equal('pdf');
-
     expect(RMR.mime.extensionFor('image/svg+xml')).to.equal('svg');
-
     expect(RMR.mime.extensionFor('text/html')).to.equal('html');
     expect(RMR.mime.extensionFor('text/css')).to.equal('css');
-
     expect(RMR.mime.extensionFor('text/javascript')).to.equal('js');
-
     expect(RMR.mime.extensionFor('application/json')).to.equal('json');
-
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
   });
 
