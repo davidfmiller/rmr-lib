@@ -27,6 +27,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
 
     expect(RMR.mime.extensionFor('application/rss+xml')).to.equal('rss');
+    expect(RMR.mime.extensionFor('text/x-yaml')).to.equal('yml');
   });
 
   it('RMR.mime.fromPath', function fromPath() {
@@ -39,9 +40,9 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('image.jpg')).to.equal('image/jpeg');
     expect(RMR.mime.fromPath('image.gif')).to.equal('image/gif');
     expect(RMR.mime.fromPath('image.png')).to.equal('image/png');
-    
+
     expect(RMR.mime.fromPath('image.svg')).to.equal('image/svg+xml');
-    
+
     expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
     expect(RMR.mime.fromPath('doc.xml')).to.equal('text/xml');
     expect(RMR.mime.fromPath('page.htm')).to.equal('text/html');
@@ -49,6 +50,8 @@ describe('RMR.mime', function() {
 
     expect(RMR.mime.fromPath('image.tiff')).to.equal('image/tiff');
     expect(RMR.mime.fromPath('image.tif')).to.equal('image/tiff');
+    expect(RMR.mime.fromPath('text.yaml')).to.equal('text/x-yaml');
+    expect(RMR.mime.fromPath('text.yml')).to.equal('text/x-yaml');
 
     expect(RMR.mime.fromPath('styles.css')).to.equal('text/css');
     expect(RMR.mime.fromPath('unknown')).to.equal('application/octet-stream');

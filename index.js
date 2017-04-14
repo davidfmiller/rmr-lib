@@ -323,6 +323,9 @@ const mimeForPath = function(filename) {
     case '.tif':
     case '.tiff':
       return 'image/tiff';
+    case '.yaml':
+    case '.yml':
+      return 'text/x-yaml';
   }
 
   return 'application/octet-stream';
@@ -347,6 +350,8 @@ const extensionForMime = function(mime) {
       return 'json';
     case 'application/rss+xml':
       return 'rss';
+    case 'text/x-yaml':
+      return 'yml';
     case 'text/html':
       return 'html';
     case 'application/atom+xml':
