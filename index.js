@@ -312,8 +312,12 @@ const mimeForPath = function(filename) {
       return 'image/png';
     case '.gif':
       return 'image/gif';
+    case '.rss':
+      return 'application/rss+xml';
     case '.xml':
       return 'text/xml';
+    case 'atom':
+      return 'application/atom+xml';
     case '.svg':
       return 'image/svg+xml';
     case '.tif':
@@ -341,8 +345,12 @@ const extensionForMime = function(mime) {
       return 'js';
     case 'application/json':
       return 'json';
+    case 'application/rss+xml':
+      return 'rss';
     case 'text/html':
       return 'html';
+    case 'application/atom+xml':
+      return 'atom';
     case 'image/png':
       return 'png';
     case 'image/tiff':

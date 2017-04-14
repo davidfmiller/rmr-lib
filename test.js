@@ -25,6 +25,8 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('text/javascript')).to.equal('js');
     expect(RMR.mime.extensionFor('application/json')).to.equal('json');
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
+
+    expect(RMR.mime.extensionFor('application/rss+xml')).to.equal('rss');
   });
 
   it('RMR.mime.fromPath', function fromPath() {
@@ -32,6 +34,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('script.js')).to.equal('text/javascript');
     expect(RMR.mime.fromPath('script.json')).to.equal('application/json');
 
+    expect(RMR.mime.fromPath('feed.rss')).to.equal('application/rss+xml');
     expect(RMR.mime.fromPath('image.jpeg')).to.equal('image/jpeg');
     expect(RMR.mime.fromPath('image.jpg')).to.equal('image/jpeg');
     expect(RMR.mime.fromPath('image.gif')).to.equal('image/gif');
