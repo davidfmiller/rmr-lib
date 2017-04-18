@@ -314,6 +314,12 @@ const mimeForPath = function(filename) {
       return 'image/gif';
     case '.rss':
       return 'application/rss+xml';
+
+    case '.txt':
+    case '.md':
+    case '.markdown':
+      return 'text/plain';
+
     case '.xml':
       return 'text/xml';
     case 'atom':

@@ -43,6 +43,10 @@ describe('RMR.mime', function() {
 
     expect(RMR.mime.fromPath('image.svg')).to.equal('image/svg+xml');
 
+    expect(RMR.mime.fromPath('text.md')).to.equal('text/plain');
+    expect(RMR.mime.fromPath('text.markdown')).to.equal('text/plain');
+    expect(RMR.mime.fromPath('text.txt')).to.equal('text/plain');
+
     expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
     expect(RMR.mime.fromPath('doc.xml')).to.equal('text/xml');
     expect(RMR.mime.fromPath('page.htm')).to.equal('text/html');
@@ -64,7 +68,7 @@ describe('RMR.url', function() {
 
   it('RMR.url', function url() {
     expect(RMR.url.isA('http://google.com')).to.equal(true);
-    expect(RMR.url.isA('https://google.com')).to.equal(true);
+    expect(RMR.url.isA('https://google.com/')).to.equal(true);
     expect(RMR.url.isA('abc')).to.equal(false);
   });
   
