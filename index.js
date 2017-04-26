@@ -119,26 +119,28 @@ const parseMetadata = function(markup, options) {
         if (! keyAttribute) { continue; }
         if (! valueAttribute) { continue;  }
 
+        valueAttribute = valueAttribute ? valueAttribute.value.trim() : null;
+
         if (keyAttribute.value == 'og:image' && valueAttribute) {
           OBJ.og.image = {
             mime : null,
-            url : url.resolve(options.baseURL, valueAttribute.value)
+            url : url.resolve(options.baseURL, valueAttribute)
           };
         }
         else if (keyAttribute.value == 'og:title' && valueAttribute) {
-          OBJ.og.title = valueAttribute.value;
+          OBJ.og.title = valueAttribute;
         }
         else if (keyAttribute.value == 'og:email' && valueAttribute) {
-          OBJ.og.email = valueAttribute.value;
+          OBJ.og.email = valueAttribute;
         }
         else if (keyAttribute.value == 'og:description' && valueAttribute) {
-          OBJ.og.description = valueAttribute.value;
+          OBJ.og.description = valueAttribute;
         }
         else if (keyAttribute.value == 'description' && valueAttribute) {
-          OBJ.description = valueAttribute.value;
+          OBJ.description = valueAttribute;
         }
         else if (keyAttribute.value == 'keywords' && valueAttribute) {
-          OBJ.keywords = valueAttribute.value;
+          OBJ.keywords = valueAttribute;
         }
       }
 
@@ -319,7 +321,6 @@ const mimeForPath = function(filename) {
     case '.md':
     case '.markdown':
       return 'text/plain';
-
     case '.xml':
       return 'text/xml';
     case 'atom':
