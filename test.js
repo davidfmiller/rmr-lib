@@ -18,6 +18,8 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('image/x-icon')).to.equal('ico');
     expect(RMR.mime.extensionFor('application/xml')).to.equal('xml');
 
+    expect(RMR.mime.extensionFor('video/webm')).to.equal('webm');
+
     expect(RMR.mime.extensionFor('audio/mpeg3')).to.equal('mp3');
     expect(RMR.mime.extensionFor('audio/m4a')).to.equal('m4a');
     expect(RMR.mime.extensionFor('audio/mp4')).to.equal('m4a');
@@ -30,6 +32,8 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('text/javascript')).to.equal('js');
     expect(RMR.mime.extensionFor('application/json')).to.equal('json');
     expect(RMR.mime.extensionFor('asdfadsf')).to.equal(null);
+
+
 
     expect(RMR.mime.extensionFor('application/rss+xml')).to.equal('rss');
     expect(RMR.mime.extensionFor('text/x-yaml')).to.equal('yml');
@@ -55,6 +59,10 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('text.md')).to.equal('text/plain');
     expect(RMR.mime.fromPath('text.markdown')).to.equal('text/plain');
     expect(RMR.mime.fromPath('text.txt')).to.equal('text/plain');
+    
+    expect(RMR.mime.fromPath('feed.atom')).to.equal('application/atom+xml');
+    
+    expect(RMR.mime.fromPath('video.webm')).to.equal('video/webm');
 
     expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
     expect(RMR.mime.fromPath('doc.xml')).to.equal('text/xml');
