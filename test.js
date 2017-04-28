@@ -9,6 +9,8 @@ describe('RMR.mime', function() {
 
   it('RMR.mime.extensionFor', function extensionFor() {
 
+    expect(RMR.mime.extensionFor('application/x-zip-compressed')).to.equal('zip');
+
     expect(RMR.mime.extensionFor('image/png')).to.equal('png');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
     expect(RMR.mime.extensionFor('image/jpeg')).to.equal('jpg');
@@ -40,6 +42,8 @@ describe('RMR.mime', function() {
   });
 
   it('RMR.mime.fromPath', function fromPath() {
+
+    expect(RMR.mime.fromPath('archive.zip')).to.equal('application/x-zip-compressed');
 
     expect(RMR.mime.fromPath('audio.mp3')).to.equal('audio/mpeg');
     expect(RMR.mime.fromPath('audio.m4a')).to.equal('audio/mp4');

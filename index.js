@@ -345,6 +345,9 @@ const mimeForPath = function(filename) {
     case '.yaml':
     case '.yml':
       return 'text/x-yaml';
+    case '.zip':
+      return 'application/x-zip-compressed';
+
   }
 
   return 'application/octet-stream';
@@ -359,6 +362,9 @@ const mimeForPath = function(filename) {
 const extensionForMime = function(mime) {
 
   switch (mime) {
+
+    case 'application/x-zip-compressed':
+      return 'zip';
     case 'application/pdf':
       return 'pdf';
     case 'audio/mpeg':
