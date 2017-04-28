@@ -16,7 +16,7 @@ const
 /**
   Retrieve metadata from a HTML document
 
-  @param markup {String} - the contents of the HTML document that will be parsed
+  @param markup {String, null} - the contents of the HTML document that will be parsed
   @param options {Object} - `baseURL` {String} - base URL that will be applied to all relative paths within the document
                             `extended` {Bool}  - if `true` external resources will be retrieved
   @return {Object} - ex:
@@ -79,8 +79,6 @@ const parseMetadata = function(markup, options) {
         metas = select('//x:meta', doc),
         links = select('//x:link', doc),
         title = select('//x:title', doc);
-
-//console.log(options);
 
       if (title && title.length) {
         OBJ.title = title[0].firstChild.nodeValue;
@@ -150,9 +148,11 @@ const parseMetadata = function(markup, options) {
       }
     }
 
+    // loop through all external icons and ensure a fully-qualified URL is referencing them
     var
     parsed = url.parse(options.baseURL),
     addresses = {};
+
 
     if (OBJ.favicon) {
       addresses.favicon = OBJ.favicon.url;
@@ -172,9 +172,10 @@ const parseMetadata = function(markup, options) {
       addresses['apple-touch-icon'] = url.resolve(parsed.protocol + '//' + parsed.hostname, '/apple-touch-icon.png');
     }
 
-    // if both icons have been retrieved, resolve
-    if (Object.keys(addresses).length === 0) { resolve(OBJ); }
+    // if no icons need to be retrieved, resolve
+    if (Object.keys(addresses).length === 0) { resolve(OBJ); return; }
 
+    // otherwise, send a HEAD request to determine their mime-type
     async.map(Object.keys(addresses), function(key, callback) {
       request.head({
         url : addresses[key],
@@ -183,6 +184,7 @@ const parseMetadata = function(markup, options) {
         }
       }).then(function(response) {
 
+        // if the key is nested (ex: "og.image"), 
         var bits = key.split('.');
         if (bits.length == 1) {
           OBJ[key] = { 
@@ -196,12 +198,13 @@ const parseMetadata = function(markup, options) {
           };
         }
 
-
         callback();
-      }).catch(function(e) { // if icon doesn't exist, move on
 
+      }).catch(function(e) { // if icon doesn't exist, move on
         callback();
       });
+
+    // when all fetches are complete, resolve the promise
     }, function(err, results) {
       resolve(OBJ);
     });
@@ -229,6 +232,7 @@ const retrieveMetadata = function(address, options) {
 
   return new Promise(function(resolve, reject) {
 
+    // send a HEAD request to determine mime-type of response
     request.head({
       url : address,
       headers : {
@@ -247,6 +251,7 @@ const retrieveMetadata = function(address, options) {
         options.bytes = parseInt(length, 10);
       }
 
+      // if the resource is a page, retrieve its contents and proceed parsing
       if (mime.substring(0,9) == 'text/html') {
 
         request.get({
@@ -270,6 +275,7 @@ const retrieveMetadata = function(address, options) {
           });
         });
 
+      // otherwise it's a non-html resource
       } else {
 
         parseMetadata(null, options).then(function(obj) {
@@ -310,13 +316,17 @@ const mimeForPath = function(filename) {
     case '.jpg':
     case '.jpeg':
       return 'image/jpeg';
+    case '.mp3':
+      return 'audio/mpeg';
+    case '.mp4':
+    case '.m4a':
+      return 'audio/mp4';
     case '.png':
       return 'image/png';
     case '.gif':
       return 'image/gif';
     case '.rss':
       return 'application/rss+xml';
-
     case '.txt':
     case '.md':
     case '.markdown':
@@ -349,6 +359,13 @@ const extensionForMime = function(mime) {
   switch (mime) {
     case 'application/pdf':
       return 'pdf';
+    case 'audio/mpeg':
+    case 'audio/mpeg3':
+    case 'audio/mp3':
+      return 'mp3';
+    case 'audio/m4a':
+    case 'audio/mp4':
+      return 'm4a';
     case 'text/css':
       return 'css';
     case 'text/javascript':

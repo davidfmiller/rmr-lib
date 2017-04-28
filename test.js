@@ -17,6 +17,11 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('image/vnd.microsoft.icon')).to.equal('ico');
     expect(RMR.mime.extensionFor('image/x-icon')).to.equal('ico');
     expect(RMR.mime.extensionFor('application/xml')).to.equal('xml');
+
+    expect(RMR.mime.extensionFor('audio/mpeg3')).to.equal('mp3');
+    expect(RMR.mime.extensionFor('audio/m4a')).to.equal('m4a');
+    expect(RMR.mime.extensionFor('audio/mp4')).to.equal('m4a');
+
     expect(RMR.mime.extensionFor('text/xml')).to.equal('xml');
     expect(RMR.mime.extensionFor('application/pdf')).to.equal('pdf');
     expect(RMR.mime.extensionFor('image/svg+xml')).to.equal('svg');
@@ -31,6 +36,10 @@ describe('RMR.mime', function() {
   });
 
   it('RMR.mime.fromPath', function fromPath() {
+
+    expect(RMR.mime.fromPath('audio.mp3')).to.equal('audio/mpeg');
+    expect(RMR.mime.fromPath('audio.m4a')).to.equal('audio/mp4');
+    expect(RMR.mime.fromPath('audio.mp4')).to.equal('audio/mp4');
 
     expect(RMR.mime.fromPath('script.js')).to.equal('text/javascript');
     expect(RMR.mime.fromPath('script.json')).to.equal('application/json');
