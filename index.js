@@ -316,6 +316,8 @@ const mimeForPath = function(filename) {
     case '.jpg':
     case '.jpeg':
       return 'image/jpeg';
+    case '.jp2':
+      return 'image/jp2';
     case '.mp3':
       return 'audio/mpeg';
     case '.mp4':
@@ -394,6 +396,8 @@ const extensionForMime = function(mime) {
       return 'png';
     case 'image/tiff':
       return 'tiff';
+    case 'image/jp2':
+      return 'jp2';
     case 'image/jpeg':
       return 'jpg';
     case 'image/gif':

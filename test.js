@@ -14,6 +14,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('image/png')).to.equal('png');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
     expect(RMR.mime.extensionFor('image/jpeg')).to.equal('jpg');
+    expect(RMR.mime.extensionFor('image/jp2')).to.equal('jp2');
     expect(RMR.mime.extensionFor('image/gif')).to.equal('gif');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
     expect(RMR.mime.extensionFor('image/vnd.microsoft.icon')).to.equal('ico');
@@ -55,6 +56,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('feed.rss')).to.equal('application/rss+xml');
     expect(RMR.mime.fromPath('image.jpeg')).to.equal('image/jpeg');
     expect(RMR.mime.fromPath('image.jpg')).to.equal('image/jpeg');
+    expect(RMR.mime.fromPath('image.jp2')).to.equal('image/jp2');
     expect(RMR.mime.fromPath('image.gif')).to.equal('image/gif');
     expect(RMR.mime.fromPath('image.png')).to.equal('image/png');
 
