@@ -337,6 +337,8 @@ const mimeForPath = function(filename) {
       return 'text/xml';
     case '.atom':
       return 'application/atom+xml';
+    case '.webp':
+      return 'image/webp';
     case '.webm':
       return 'video/webm';
     case '.svg':
@@ -398,6 +400,8 @@ const extensionForMime = function(mime) {
       return 'tiff';
     case 'image/jp2':
       return 'jp2';
+    case 'image/webp':
+      return 'webp';
     case 'image/jpeg':
       return 'jpg';
     case 'image/gif':

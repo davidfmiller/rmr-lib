@@ -14,6 +14,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.extensionFor('image/png')).to.equal('png');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
     expect(RMR.mime.extensionFor('image/jpeg')).to.equal('jpg');
+    expect(RMR.mime.extensionFor('image/webp')).to.equal('webp');
     expect(RMR.mime.extensionFor('image/jp2')).to.equal('jp2');
     expect(RMR.mime.extensionFor('image/gif')).to.equal('gif');
     expect(RMR.mime.extensionFor('image/tiff')).to.equal('tiff');
@@ -59,6 +60,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('image.jp2')).to.equal('image/jp2');
     expect(RMR.mime.fromPath('image.gif')).to.equal('image/gif');
     expect(RMR.mime.fromPath('image.png')).to.equal('image/png');
+    expect(RMR.mime.fromPath('image.webp')).to.equal('image/webp');
 
     expect(RMR.mime.fromPath('image.svg')).to.equal('image/svg+xml');
 
@@ -69,6 +71,7 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('feed.atom')).to.equal('application/atom+xml');
     
     expect(RMR.mime.fromPath('video.webm')).to.equal('video/webm');
+
 
     expect(RMR.mime.fromPath('page.html')).to.equal('text/html');
     expect(RMR.mime.fromPath('doc.xml')).to.equal('text/xml');
