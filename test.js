@@ -137,9 +137,9 @@ describe('RMR.meta', function() {
   it('wired', function() {
     return RMR.meta.retrieve('https://www.wired.com/2017/04/autodesk-project-discover/').then(function(data) {
       expect(data.title).to.equal('Autodesk\'s Project Discover Creates Floor Plans That Try to Please All Workers | WIRED');
-      expect(data.og.title).to.equal('If an AI Doesn’t Take Your Job, It Will Design Your Office');
-      expect(data.og.image.url).to.equal('https://www.wired.com/wp-content/uploads/2017/03/AI_office-1200x630-e1491340535830.jpg');
-//      expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
+//      expect(data.og.title).to.equal('If an AI Doesn’t Take Your Job, It Will Design Your Office');
+      expect(data.og.image.url).to.equal('https://media.wired.com/photos/5926625acefba457b0799c6b/191:100/pass/AI_office.jpg');
+      expect(data.favicon.url).to.equal('https://www.wired.com/favicon.ico');
     }).catch(function(m) {
       console.log(m); throw new Error(m.toString());
     });
@@ -150,7 +150,7 @@ describe('RMR.meta', function() {
     return RMR.meta.retrieve('http://www.apple.com/ipad-pro/').then(function(data) {
       expect(data.title).to.equal('iPad Pro - Apple');
       expect(data.favicon.url).to.equal('https://www.apple.com/favicon.ico');
-      expect(data.og.description).to.equal('iPad Pro delivers epic power, in 12.9-inch and 9.7-inch sizes. Discover the A9X Chip, Advanced Retina display, 12MP iSight camera, and more.');
+      expect(data.og.description).to.equal('iPad Pro introduces our most advanced Retina display, the powerful A10X Fusion chip, iOS features tailored for iPad, and a new 10.5-inch model.');
       expect(data.mime).to.equal('text/html');
     }).catch(function(m) {
       console.log(m); throw new Error(m.toString());
