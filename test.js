@@ -1,3 +1,5 @@
+/*global it, describe */
+
 const
   RMR = require('./index'),
   chai = require('chai'),
@@ -8,7 +10,6 @@ describe('RMR.mime', function() {
   this.timeout(10000);
 
   it('RMR.mime.extensionFor', function extensionFor() {
-
     expect(RMR.mime.extensionFor('application/x-zip-compressed')).to.equal('zip');
 
     expect(RMR.mime.extensionFor('image/png')).to.equal('png');
@@ -44,7 +45,6 @@ describe('RMR.mime', function() {
   });
 
   it('RMR.mime.fromPath', function fromPath() {
-
     expect(RMR.mime.fromPath('archive.zip')).to.equal('application/x-zip-compressed');
 
     expect(RMR.mime.fromPath('audio.mp3')).to.equal('audio/mpeg');
@@ -67,9 +67,9 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('text.md')).to.equal('text/plain');
     expect(RMR.mime.fromPath('text.markdown')).to.equal('text/plain');
     expect(RMR.mime.fromPath('text.txt')).to.equal('text/plain');
-    
+
     expect(RMR.mime.fromPath('feed.atom')).to.equal('application/atom+xml');
-    
+
     expect(RMR.mime.fromPath('video.webm')).to.equal('video/webm');
 
 
@@ -86,19 +86,14 @@ describe('RMR.mime', function() {
     expect(RMR.mime.fromPath('styles.css')).to.equal('text/css');
     expect(RMR.mime.fromPath('unknown')).to.equal('application/octet-stream');
   });
-
-
 });
 
 describe('RMR.url', function() {
-
   it('RMR.url', function url() {
     expect(RMR.url.isA('http://google.com')).to.equal(true);
     expect(RMR.url.isA('https://google.com/')).to.equal(true);
     expect(RMR.url.isA('abc')).to.equal(false);
   });
-  
-  
 });
 
 
@@ -106,69 +101,65 @@ describe('RMR.meta', function() {
   this.timeout(10000);
 
   it ('throws', function() {
-  
-    return RMR.meta.retrieve('https://adfadfadfasf.ca').then(function(data) {
+    return RMR.meta.retrieve('https://adfadfadfasf.ca').then(function(/* data */) {
       assert.fail();
     }).catch(function(err) {
       expect(err).to.be.an.instanceof(Error);
     });
   });
 
-
   it('RMR og:image', function() {
     return RMR.meta.retrieve('https://readmeansrun.com/assets/img/og-image.png').then(function(data) {
-
-      expect(data.title).to.equal(undefined); 
+      expect(data.title).to.equal(undefined);
       expect(data['apple-touch-icon'].url).to.equal('https://readmeansrun.com/apple-touch-icon.png');
       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
       expect(data.mime).to.equal('image/png');
       expect(data.bytes).to.equal(294);
       expect(data.url).to.equal('https://readmeansrun.com/assets/img/og-image.png');
-
-    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+    }).catch(function(m) {
+      console.log(m); throw new Error(m.toString());
+    });
   });
-
 
   it('google.ca', function() {
     return RMR.meta.retrieve('https://google.ca').then(function(data) {
-
-      expect(data.title).to.equal('Google'); 
+      expect(data.title).to.equal('Google');
       expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
       expect(data.bytes).to.equal(undefined);
       expect(data.og.email).to.equal(undefined);
       expect(data.mime).to.equal('text/html');
-
-    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+    }).catch(function(m) {
+      console.log(m); throw new Error(m.toString());
+    });
   });
 
 
   it('wired', function() {
     return RMR.meta.retrieve('https://www.wired.com/2017/04/autodesk-project-discover/').then(function(data) {
-
-      expect(data.title).to.equal('Autodesk\'s Project Discover Creates Floor Plans That Try to Please All Workers | WIRED'); 
+      expect(data.title).to.equal('Autodesk\'s Project Discover Creates Floor Plans That Try to Please All Workers | WIRED');
       expect(data.og.title).to.equal('If an AI Doesn’t Take Your Job, It Will Design Your Office');
       expect(data.og.image.url).to.equal('https://www.wired.com/wp-content/uploads/2017/03/AI_office-1200x630-e1491340535830.jpg');
 //      expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
-
-    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+    }).catch(function(m) {
+      console.log(m); throw new Error(m.toString());
+    });
   });
 
 
   it('apple store', function() {
     return RMR.meta.retrieve('http://www.apple.com/ipad-pro/').then(function(data) {
-
-      expect(data.title).to.equal('iPad Pro - Apple'); 
+      expect(data.title).to.equal('iPad Pro - Apple');
       expect(data.favicon.url).to.equal('https://www.apple.com/favicon.ico');
       expect(data.og.description).to.equal('iPad Pro delivers epic power, in 12.9-inch and 9.7-inch sizes. Discover the A9X Chip, Advanced Retina display, 12MP iSight camera, and more.');
       expect(data.mime).to.equal('text/html');
-
-    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+    }).catch(function(m) {
+      console.log(m); throw new Error(m.toString());
+    });
   });
 
   it('RMR', function() {
     return RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
-
-      expect(data.title).to.equal('READMEANSRUN'); 
+      expect(data.title).to.equal('READMEANSRUN');
       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
       expect(data.og.description).to.equal('READMEANSRUN programs computers and takes pictures');
       expect(data.og.email).to.equal('davidfmiller@me.com');
@@ -176,18 +167,16 @@ describe('RMR.meta', function() {
       expect(data.keywords).to.equal('READMEANSRUN');
       expect(data.mime).to.equal('text/html');
       expect(data.url).to.equal('https://readmeansrun.com/');
-
-    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+    }).catch(function(m) {
+      console.log(m); throw new Error(m.toString());
+    });
   });
 
   it('RMR no icons', function() {
-    return RMR.meta.retrieve('http://readmeansrun.com', { icons : false }).then(function(data) {
-
+    return RMR.meta.retrieve('http://readmeansrun.com', { icons: false }).then(function(data) {
       expect(data.favicon).to.equal(undefined);
-
-    }).catch(function(m) { console.log(m); throw new Error(m.toString()); });
+    }).catch(function(m) {
+      console.log(m); throw new Error(m.toString());
+    });
   });
-    
-
-
 });
