@@ -6,7 +6,7 @@ const
     xmlser = require('xmlserializer'),
     url = require('url'),
     async = require('async'),
-    process = require('process'),
+//    process = require('process'),
     DOM = require('xmldom').DOMParser,
     request = require('request-promise-native'),
     path = require('path'),
@@ -16,21 +16,21 @@ const
 /**
   Retrieve metadata from a HTML document
 
-  @param markup {String, null} - the contents of the HTML document that will be parsed
-  @param options {Object} - `baseURL` {String} - base URL that will be applied to all relative paths within the document
+  @param {String} markup - (optional) the contents of the HTML document that will be parsed
+  @param {Object} options  - `baseURL` {String} - base URL that will be applied to all relative paths within the document
                             `extended` {Bool}  - if `true` external resources will be retrieved
   @return {Object} - ex:
 
   {
-    "url" : "https://readmeansrun.com/",
-    "mime" : "text/html",
-    "bytes" : 23, // # of bytes
+    "url": "https://readmeansrun.com/",
+    "mime": "text/html",
+    "bytes": 23, // # of bytes
     "title": "READMEANSRUN",
     "apple-touch-icon": {
       "mime": "image/png",
       "url": "https://readmeansrun.com/apple-touch-icon.png"
     },
-    "og" : {
+    "og": {
       "email": "davidfmiller@me.com",
       "title": "READMEANSRUN",
       "description": "READMEANSRUN makes websites and takes pictures",
@@ -46,11 +46,9 @@ const
   }
  */
 const parseMetadata = function(markup, options) {
-
-  return new Promise(function(resolve, reject) { 
-
-    var
-      OBJ = { og : {} },
+  return new Promise(function(resolve /* , reject */) {
+    const OBJ = { og: {} };
+    let
       i = 0,
       node = null,
       keyAttribute = null,
@@ -70,7 +68,6 @@ const parseMetadata = function(markup, options) {
     OBJ.url = options.baseURL;
 
     if (markup) {
-
       const
         document = parse5.parse(markup),
         xhtml = xmlser.serializeToString(document),
@@ -85,79 +82,83 @@ const parseMetadata = function(markup, options) {
       }
 
       for (i in links) {
-
+        if (! links.hasOwnProperty(i)) {
+          continue;
+        }
         node = links[i];
         keyAttribute = xpath.select1('@rel', node);
         valueAttribute = xpath.select1('@href', node);
 
-        if (! keyAttribute) { continue; }
+        if (! keyAttribute) {
+          continue;
+        }
 
-        if (keyAttribute.value == 'shortcut icon' && valueAttribute) {
+        if (keyAttribute.value === 'shortcut icon' && valueAttribute) {
           OBJ.favicon = {
-            mime : null,
-            url : url.resolve(options.baseURL, valueAttribute.value)
+            mime: null,
+            url: url.resolve(options.baseURL, valueAttribute.value)
           };
-        }
-        else if (keyAttribute.value == 'apple-touch-icon' && valueAttribute) {
+        } else if (keyAttribute.value === 'apple-touch-icon' && valueAttribute) {
           OBJ['apple-touch-icon'] = {
-            mime : null,
-            url : url.resolve(options.baseURL, valueAttribute.value)
+            mime: null,
+            url: url.resolve(options.baseURL, valueAttribute.value)
           };
-        }
-        else if (keyAttribute.value == 'canonical' && valueAttribute) {
+        } else if (keyAttribute.value === 'canonical' && valueAttribute) {
           OBJ.canonical = valueAttribute.value;
         }
       }
 
       for (i in metas) {
+        if (! metas.hasOwnProperty(i)) {
+          continue;
+        }
+
         node = metas[i];
         keyAttribute = xpath.select1('@property', node) || xpath.select1('@name', node);
         valueAttribute = xpath.select1('@content', node);
 
-        if (! keyAttribute) { continue; }
-        if (! valueAttribute) { continue;  }
+        if (! keyAttribute) {
+          continue;
+        }
+        if (! valueAttribute) {
+          continue;
+        }
 
         valueAttribute = valueAttribute ? valueAttribute.value.trim() : null;
 
-        if (keyAttribute.value == 'og:image' && valueAttribute) {
+        if (keyAttribute.value === 'og:image' && valueAttribute) {
           OBJ.og.image = {
-            mime : null,
-            url : url.resolve(options.baseURL, valueAttribute)
+            mime: null,
+            url: url.resolve(options.baseURL, valueAttribute)
           };
-        }
-        else if (keyAttribute.value == 'og:title' && valueAttribute) {
+        } else if (keyAttribute.value === 'og:title' && valueAttribute) {
           OBJ.og.title = valueAttribute;
-        }
-        else if (keyAttribute.value == 'og:email' && valueAttribute) {
+        } else if (keyAttribute.value === 'og:email' && valueAttribute) {
           OBJ.og.email = valueAttribute;
-        }
-        else if (keyAttribute.value == 'og:description' && valueAttribute) {
+        } else if (keyAttribute.value === 'og:description' && valueAttribute) {
           OBJ.og.description = valueAttribute;
-        }
-        else if (keyAttribute.value == 'description' && valueAttribute) {
+        } else if (keyAttribute.value === 'description' && valueAttribute) {
           OBJ.description = valueAttribute;
-        }
-        else if (keyAttribute.value == 'keywords' && valueAttribute) {
+        } else if (keyAttribute.value === 'keywords' && valueAttribute) {
           OBJ.keywords = valueAttribute;
         }
       }
 
       // if we don't need the icons, resolve
-      if (! options.baseURL || ! options.extended) { 
+      if (! options.baseURL || ! options.extended) {
         resolve(OBJ);
       }
     }
 
     // loop through all external icons and ensure a fully-qualified URL is referencing them
-    var
+    const
     parsed = url.parse(options.baseURL),
     addresses = {};
 
 
     if (OBJ.favicon) {
       addresses.favicon = OBJ.favicon.url;
-    }
-    else {
+    } else {
       addresses.favicon = url.resolve(parsed.protocol + '//' + parsed.hostname, '/favicon.ico');
     }
 
@@ -167,48 +168,46 @@ const parseMetadata = function(markup, options) {
 
     if (OBJ['apple-touch-icon']) {
       addresses['apple-touch-icon'] = OBJ['apple-touch-icon'].url;
-    }
-    else {
+    } else {
       addresses['apple-touch-icon'] = url.resolve(parsed.protocol + '//' + parsed.hostname, '/apple-touch-icon.png');
     }
 
     // if no icons need to be retrieved, resolve
-    if (Object.keys(addresses).length === 0) { resolve(OBJ); return; }
+    if (Object.keys(addresses).length === 0) {
+      resolve(OBJ);
+      return;
+    }
 
     // otherwise, send a HEAD request to determine their mime-type
     async.map(Object.keys(addresses), function(key, callback) {
       request.head({
-        url : addresses[key],
+        url: addresses[key],
         headers: {
           'User-Agent': USER_AGENT
         }
       }).then(function(response) {
-
-        // if the key is nested (ex: "og.image"), 
-        var bits = key.split('.');
-        if (bits.length == 1) {
-          OBJ[key] = { 
-            mime : response['content-type'],
-            url : addresses[key]
+        // if the key is nested (ex: "og.image"),
+        const bits = key.split('.');
+        if (bits.length === 1) {
+          OBJ[key] = {
+            mime: response['content-type'],
+            url: addresses[key]
           };
         } else {
-          OBJ[bits[0]][bits[1]] = { 
-            mime : response['content-type'],
-            url : addresses[key]
+          OBJ[bits[0]][bits[1]] = {
+            mime: response['content-type'],
+            url: addresses[key]
           };
         }
 
         callback();
-
-      }).catch(function(e) { // if icon doesn't exist, move on
+      }).catch(function() { // if icon doesn't exist, move on
         callback();
       });
-
     // when all fetches are complete, resolve the promise
-    }, function(err, results) {
+    }, function(/* err, results */) {
       resolve(OBJ);
     });
-
   }); // end promise
 };
 
@@ -216,32 +215,30 @@ const parseMetadata = function(markup, options) {
 /**
   Retrieve metadata from a URL
 
-  @see parseMetadata
-  @param address {String} - the URL whose metadata should be retrieved
-  @param options {Object} - see `options` for parseMetadata 
+  @param {String} address - the URL whose metadata should be retrieved
+  @param {Object} options - see `options` for parseMetadata
   @throws {Error} - if the address can't be retrieved
+  @return {Promise} - resolves with URL metadata
+  @see parseMetadata
  */
 const retrieveMetadata = function(address, options) {
-
-  var ARGS = arguments;
+//  var ARGS = arguments;
   if (! options) {
     options = {
-      extended : true
+      extended: true
     };
   }
 
   return new Promise(function(resolve, reject) {
-
     // send a HEAD request to determine mime-type of response
     request.head({
-      url : address,
-      headers : {
-        'User-Agent' : USER_AGENT
+      url: address,
+      headers: {
+        'User-Agent': USER_AGENT
       },
       resolveWithFullResponse: true
     }).then(function(response) {
-
-      var
+      const
         mime = response.headers['content-type'],
         length = response.headers['content-length'];
 
@@ -252,17 +249,15 @@ const retrieveMetadata = function(address, options) {
       }
 
       // if the resource is a page, retrieve its contents and proceed parsing
-      if (mime.substring(0,9) == 'text/html') {
-
+      if (mime.substring(0,9) === 'text/html') {
         request.get({
-          url : address,
-          headers : {
-            'User-Agent' : USER_AGENT
+          url: address,
+          headers: {
+            'User-Agent': USER_AGENT
           },
           gzip: true,
           resolveWithFullResponse: true
         }, function(err, resp, body) {
-
           if (err) {
             reject(err);
             return;
@@ -274,31 +269,27 @@ const retrieveMetadata = function(address, options) {
             reject(err);
           });
         });
-
       // otherwise it's a non-html resource
       } else {
-
         parseMetadata(null, options).then(function(obj) {
           resolve(obj);
         }).catch(function(e) {
           reject(e);
         });
       }
-    }).catch(function(err) { 
+    }).catch(function(err) {
       reject(err);
     });
-
   });
 };
 
 /**
  Determine the mime-type for a given file
 
- @param filename {String} - The (complete or partial) file name whose mime-type should be determined
+ @param {String} filename - The (complete or partial) file name whose mime-type should be determined
  @return {String} - Defaults to 'application/octet-stream'
  */
 const mimeForPath = function(filename) {
-
   const extension = path.extname(filename);
 
   switch (extension) {
@@ -351,7 +342,6 @@ const mimeForPath = function(filename) {
       return 'text/x-yaml';
     case '.zip':
       return 'application/x-zip-compressed';
-
   }
 
   return 'application/octet-stream';
@@ -360,13 +350,11 @@ const mimeForPath = function(filename) {
 /**
  Retrieve file extension for a given mime-type
 
- @param mime {String} 
+ @param {String} mime - the mimetype
  @return {String} - file extension *without* the leading `.`; `null` if no such file extension is known
  */
 const extensionForMime = function(mime) {
-
   switch (mime) {
-
     case 'application/x-zip-compressed':
       return 'zip';
     case 'application/pdf':
@@ -423,7 +411,7 @@ const extensionForMime = function(mime) {
 /**
   Determine if a string is a valid internet URL
 
-  @param str {String} - the string to be tested
+  @param {String} str - the string to be tested
   @return {Bool} - `true` of `false`
  */
 const isURL = function(str) {
@@ -431,24 +419,24 @@ const isURL = function(str) {
 };
 
 module.exports = {
-  mime : {
-    extensionFor : extensionForMime,
-    fromPath : mimeForPath
+  mime: {
+    extensionFor: extensionForMime,
+    fromPath: mimeForPath
   },
-  url : {
-    isA : isURL,
+  url: {
+    isA: isURL
   },
-  meta : {
-    parse : parseMetadata,
-    retrieve : retrieveMetadata
+  meta: {
+    parse: parseMetadata,
+    retrieve: retrieveMetadata
   }
 };
 
 
 /*
 if (require.main === module) {
- 
-  if (process.argv.length == 3) {
+
+  if (process.argv.length === 3) {
     retrieveMetadata(process.argv[2]).then(function(meta) {
       console.log(JSON.stringify(meta));
     }).catch(function(err) {
