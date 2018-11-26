@@ -114,7 +114,7 @@ describe('RMR.meta', function() {
       expect(data['apple-touch-icon'].url).to.equal('https://readmeansrun.com/apple-touch-icon.png');
       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
       expect(data.mime).to.equal('image/png');
-      expect(data.bytes).to.equal(294);
+      expect(data.bytes).to.equal(31194);
       expect(data.url).to.equal('https://readmeansrun.com/assets/img/og-image.png');
     }).catch(function(m) {
       console.log(m); throw new Error(m.toString());
@@ -124,7 +124,7 @@ describe('RMR.meta', function() {
   it('google.ca', function() {
     return RMR.meta.retrieve('https://google.ca').then(function(data) {
       expect(data.title).to.equal('Google');
-      expect(data.favicon.url).to.equal('https://www.google.ca/images/branding/product/ico/googleg_lodp.ico');
+      expect(data.favicon.url).to.equal('https://www.google.ca/favicon.ico');
       expect(data.bytes).to.equal(undefined);
       expect(data.og.email).to.equal(undefined);
       expect(data.mime).to.equal('text/html');
@@ -150,7 +150,7 @@ describe('RMR.meta', function() {
     return RMR.meta.retrieve('http://www.apple.com/ipad-pro/').then(function(data) {
       expect(data.title).to.equal('iPad Pro - Apple');
       expect(data.favicon.url).to.equal('https://www.apple.com/favicon.ico');
-      expect(data.og.description).to.equal('iPad Pro introduces our most advanced Retina display, the powerful A10X Fusion chip, iOS features tailored for iPad, and a new 10.5-inch model.');
+      expect(data.og.description).to.equal('The new iPad Pro features an all-screen design, an edge-to-edge Liquid Retina display, the A12X Bionic chip, Face ID, and is the thinnest iPad ever.');
       expect(data.mime).to.equal('text/html');
     }).catch(function(m) {
       console.log(m); throw new Error(m.toString());
