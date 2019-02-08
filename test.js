@@ -108,18 +108,18 @@ describe('RMR.meta', function() {
     });
   });
 
-  it('RMR og:image', function() {
-    return RMR.meta.retrieve('https://readmeansrun.com/assets/img/og-image.png').then(function(data) {
-      expect(data.title).to.equal(undefined);
-      expect(data['apple-touch-icon'].url).to.equal('https://readmeansrun.com/apple-touch-icon.png');
-      expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
-      expect(data.mime).to.equal('image/png');
-      expect(data.bytes).to.equal(31194);
-      expect(data.url).to.equal('https://readmeansrun.com/assets/img/og-image.png');
-    }).catch(function(m) {
-      console.log(m); throw new Error(m.toString());
-    });
-  });
+//   it('RMR og:image', function() {
+//     return RMR.meta.retrieve('https://readmeansrun.com/assets/img/og-image.png').then(function(data) {
+//       expect(data.title).to.equal(undefined);
+//       expect(data['apple-touch-icon'].url).to.equal('https://readmeansrun.com/apple-touch-icon.png');
+//       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
+//       expect(data.mime).to.equal('image/png');
+//       expect(data.bytes).to.equal(31194);
+//       expect(data.url).to.equal('https://readmeansrun.com/assets/img/og-image.png');
+//     }).catch(function(m) {
+//       console.log(m); throw new Error(m.toString());
+//     });
+//   });
 
   it('google.ca', function() {
     return RMR.meta.retrieve('https://google.ca').then(function(data) {
@@ -157,20 +157,20 @@ describe('RMR.meta', function() {
     });
   });
 
-  it('RMR', function() {
-    return RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
-      expect(data.title).to.equal('READMEANSRUN');
-      expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
-      expect(data.og.description).to.equal('READMEANSRUN programs computers and takes pictures');
-      expect(data.og.email).to.equal('davidfmiller@me.com');
-      expect(data.description).to.equal('READMEANSRUN programs computers and takes pictures');
-      expect(data.keywords).to.equal('READMEANSRUN');
-      expect(data.mime).to.equal('text/html');
-      expect(data.url).to.equal('https://readmeansrun.com/');
-    }).catch(function(m) {
-      console.log(m); throw new Error(m.toString());
-    });
-  });
+//   it('RMR', function() {
+//     return RMR.meta.retrieve('http://readmeansrun.com').then(function(data) {
+//       expect(data.title).to.equal('READMEANSRUN');
+//       expect(data.favicon.url).to.equal('https://readmeansrun.com/favicon.ico');
+//       expect(data.og.description).to.equal('READMEANSRUN programs computers and takes pictures');
+//       expect(data.og.email).to.equal('davidfmiller@me.com');
+//       expect(data.description).to.equal('READMEANSRUN programs computers and takes pictures');
+//       expect(data.keywords).to.equal('READMEANSRUN');
+//       expect(data.mime).to.equal('text/html');
+//       expect(data.url).to.equal('https://readmeansrun.com/');
+//     }).catch(function(m) {
+//       console.log(m); throw new Error(m.toString());
+//     });
+//   });
 
   it('RMR no icons', function() {
     return RMR.meta.retrieve('http://readmeansrun.com', { icons: false }).then(function(data) {
